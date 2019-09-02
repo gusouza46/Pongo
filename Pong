@@ -1,0 +1,138 @@
+//variaveis da bolinha
+let xBolinha = 300;
+let yBolinha = 200;
+let diametro = 13;
+let raio = diametro / 2;
+
+//velocidade da bolinha
+let velocidadeXBolinha = 10;
+let velocidadeYBolinha = 10;
+
+//variaveis da raquete
+let xRaquete = 5;
+let yRaquete = 150;
+let raqueteComp = 10;
+let raqueteAlt = 90;
+
+let colidiu = false;
+
+//variaveis do oponente
+let xRaquete1 = 585;
+let yRaquete1 = 150;
+let raqueteComp1 = 10;
+let raqueteAlt1 = 90;
+
+
+//placar
+let pontos = 0;
+let pontos1 = 0;
+
+let velocidadeY1;
+
+function setup() {
+  createCanvas(600, 400);
+}
+
+function draw() {
+  background(0);
+  mostraBolinha();
+  movimentaBolinha(); 
+  colisaoBorda();
+  mostraRaquete(xRaquete, yRaquete);
+  mostraRaquete(xRaquete1, yRaquete1);
+  movRaquete();
+  movRaquete1();
+  //colisaoRaquete();
+  //colisaoRaquete1();
+  colisaoRaqueteB(xRaquete, yRaquete);
+  colisaoRaqueteB(xRaquete1, yRaquete1);
+  incluiPlacar();
+  marcaPonto();
+}
+
+function mostraBolinha(){
+  circle (xBolinha, yBolinha, diametro);
+}
+
+function movimentaBolinha(){
+  xBolinha += velocidadeXBolinha;
+  yBolinha += velocidadeYBolinha;
+}
+
+function colisaoBorda(){
+if (xBolinha + raio > width || xBolinha - raio < 0 ){
+    velocidadeXBolinha *= -1;
+  }
+  
+  if (yBolinha + raio > height || yBolinha - raio < 0){
+    velocidadeYBolinha *= -1;
+  }
+}
+
+function mostraRaquete(x, y){
+rect(x, y, raqueteComp, raqueteAlt);
+}
+
+function mostraRaquete1(){
+rect(xRaquete1, yRaquete1, raqueteComp1, raqueteAlt1);
+}
+
+function movRaquete(){
+  if (keyIsDown(UP_ARROW)){
+    yRaquete -= 10;
+  }
+  if (keyIsDown(DOWN_ARROW)){
+    yRaquete += 10;
+  }
+}
+
+function colisaoRaquete(){
+  if (xBolinha - raio < xRaquete + raqueteComp && yBolinha - raio < yRaquete + raqueteAlt && yBolinha + raio > yRaquete){
+    velocidadeXBolinha *= -1;
+  }
+}
+
+function colisaoRaquete1(){
+  if (xBolinha + raio < xRaquete1 - raqueteComp && yBolinha + raio < yRaquete1 - raqueteAlt && yBolinha - raio > yRaquete1){
+    velocidadeXBolinha *= -1;
+  }
+}
+
+function movRaquete1(){
+  velocidadeY1 = yBolinha - yRaquete1 - raqueteComp / 2 - 30;
+  yRaquete1 += velocidadeY1
+
+}
+
+function colisaoRaqueteB(x, y){
+  colidiu = 
+    collideRectCircle(x, y, raqueteComp, raqueteAlt, xBolinha, yBolinha, raio);
+  if (colidiu){
+    velocidadeXBolinha *= -1;
+  }
+}
+function incluiPlacar(){
+  stroke (255);
+  textAlign(CENTER);
+  textSize(16);
+  fill (color(255, 140, 0));
+  rect (150, 10, 40, 20);
+  fill (255);
+  text (pontos, 170, 26);
+  
+  fill (color(255, 140, 0));
+  rect (450, 10, 40, 20);
+  fill (color(255, 140, 0));
+  fill (255);
+  text (pontos1, 470, 26);
+}
+
+function marcaPonto(){
+ if (xBolinha > 590){
+   pontos += 1;
+ }
+  if (xBolinha < 10) {
+    pontos1 += 1
+  }
+}
+
